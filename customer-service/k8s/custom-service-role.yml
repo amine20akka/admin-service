@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: customer-service-role
+  labels:
+    app: customer-service
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps", "secrets"]
+    verbs: ["get", "list"]
+  - apiGroups: ["dapr.io"]
+    resources: ["*"]
+    verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: customer-service-role-binding
+  namespace: default  # Same namespace as the customer service
+subjects:
+  - kind: ServiceAccount
+    name: customer-service-account
+    namespace: default  # Same namespace as the service account
+roleRef:
+  kind: Role
+  name: customer-service-role
+  apiGroup: rbac.authorization.k8s.io

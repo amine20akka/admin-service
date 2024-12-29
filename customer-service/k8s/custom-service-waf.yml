@@ -1,0 +1,13 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: customer-service-waf
+spec:
+  selector:
+    matchLabels:
+      app: customer-service
+  action: DENY
+  rules:
+  - to:
+    - operation:
+        methods: ["DELETE"] # Block DELETE requests

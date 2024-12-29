@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: order-service-role
+  labels:
+    app: order-service
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps", "secrets"]
+    verbs: ["get", "list"]
+  - apiGroups: ["dapr.io"]
+    resources: ["*"]
+    verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: order-service-role-binding
+  namespace: default  # Same namespace as the order service
+subjects:
+  - kind: ServiceAccount
+    name: order-service-account
+    namespace: default  # Same namespace as the service account
+roleRef:
+  kind: Role
+  name: order-service-role
+  apiGroup: rbac.authorization.k8s.io

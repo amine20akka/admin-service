@@ -1,0 +1,16 @@
+# apiVersion: dapr.io/v1alpha1
+# kind: Component
+# metadata:
+#   name: mongodb-binding
+# spec:
+#   type: bindings.mongodb
+#   version: v1
+#   metadata:
+#   - name: url
+#     secretKeyRef:
+#       name: mongodb-secret
+#       key: url
+#   - name: dbName
+#     value: order_db
+#   - name: collection
+#     value: orders

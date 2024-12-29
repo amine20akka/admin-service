@@ -1,0 +1,17 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: mysql-binding
+  namespace: default
+spec:
+  type: bindings.mysql
+  version: v1
+  metadata:
+    - name: url
+      value: "root:root@tcp(mysql-service:3306)/product_db"
+    - name: maxIdleConns
+      value: "10"
+    - name: maxOpenConns
+      value: "100"
+    - name: connMaxLifetime
+      value: "1h"
