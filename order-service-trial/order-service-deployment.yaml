@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "order-service"
+        dapr.io/app-port: "5002"
+    spec:
+      containers:
+      - name: order-service
+        image: iamwaeeel/order-service:latest
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongodb:27017/orders"
+        ports:
+        - containerPort: 5002
