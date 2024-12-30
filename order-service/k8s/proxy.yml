@@ -30,4 +30,4 @@ spec:
     - destination:
         host: order-service.default.svc.cluster.local
         port:
-          # number: 5000  # Port on which the application listens
+          number: 5002  # Port on which the application listens

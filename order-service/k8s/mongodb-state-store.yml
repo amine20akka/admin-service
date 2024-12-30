@@ -1,0 +1,14 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: mongodb-state-store # The name of the component
+spec:
+  type: state.mongodb
+  version: v1
+  metadata:
+    - name: host
+      value: mongodb-service.default.svc.cluster.local:27017 # The host of the MongoDB instance
+    - name: databaseName
+      value: order_db # The database name; create one if it doesn't exist
+    - name: collection
+      value: order_collection # The collection name; create one if it doesn't exist
