@@ -76,3 +76,15 @@ Create your first JPA entity
 Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+
+
+
+
+
+
+
+Vous pourrez accéder à l’interface Zipkin sur [Node-Ip ou LoadBalancer Ip]:<NodePort> ou via un port-forward si besoin :
+bash
+Copy code
+kubectl port-forward svc/zipkin 9411:9411
