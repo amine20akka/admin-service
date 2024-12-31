@@ -1,9 +1,10 @@
 apiVersion: dapr.io/v1alpha1
 kind: Configuration
 metadata:
-  name: order-config
+  name: dapr-config
 spec:
   tracing:
-    samplingRate: "1"
-  metrics:
-    enabled: true
+    samplingRate: "1"          # 1 = 100% des requêtes. Ajustez si besoin.
+    exporterType: zipkin       # ou "zipkin"
+    zipkin:
+      endpointAddress: "http://zipkin:9411/api/v2/spans"
