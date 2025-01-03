@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-// const axios = require('axios');
+const axios = require('axios');
 const dapr = require('@dapr/dapr');
 const client1 = require('prom-client');
 const daprHost = 'http://localhost'; // Dapr Sidecar Host (not used for Axios)
@@ -38,23 +38,23 @@ app.post('/order', async (req, res) => {
     const order = new Order(req.body);
 
     try {
-        // // 1. Call Customer service to check if the customer exists
-        // const customer = await axios.get(`http://localhost:3500/v1.0/invoke/customer-service/method/customer/get/${order.customer_id}`);
-        // if (customer == null) {
-        //     return res.status(404).send({ error: 'Customer not found' });
-        // }
+        // Call Customer service to check if the customer exists
+        const customer = await axios.get(`http://localhost:3500/v1.0/invoke/customer-service/method/customer/get/${order.customer_id}`);
+        if (customer == null) {
+            return res.status(404).send({ error: 'Customer not found' });
+        }
 
-        // console.log('Customer:', customer);
-        // console.log('Customer Data:', customer.data);
+        console.log('Customer:', customer);
+        console.log('Customer Data:', customer.data);
 
-        // // 2. Call Product service to validate product availability
-        // const product = await axios.get(`http://localhost:3500/v1.0/invoke/product-service/method/product/get/${order.product_id}`);
-        // if (product.stock < order.quantity) {
-        //     return res.status(400).send({ error: 'Ordered quantity exceeds available stock' });
-        // }
+        // Call Product service to validate product availability
+        const product = await axios.get(`http://localhost:3500/v1.0/invoke/product-service/method/product/get/${order.product_id}`);
+        if (product.stock < order.quantity) {
+            return res.status(400).send({ error: 'Ordered quantity exceeds available stock' });
+        }
 
-        // console.log('Product:', product);
-        // console.log('Product Data:', product.data);
+        console.log('Product:', product);
+        console.log('Product Data:', product.data);
 
         // Save the order
         await order.save();
@@ -69,20 +69,20 @@ app.post('/order', async (req, res) => {
 
         await client.state.save(STATE_STORE_NAME, stateData);
 
-        // const updatedStock = product.stock - order.quantity;
+        const updatedStock = product.stock - order.quantity;
 
-        // // Invoke Product Service to update stock
-        // await axios.put(`http://localhost:3500/v1.0/invoke/product-service/product/update/${order.product_id}`, {
-        //     name: product.name,
-        //     price: product.price,
-        //     stock: updatedStock
-        // });
+        // Invoke Product Service to update stock
+        await axios.put(`http://localhost:3500/v1.0/invoke/product-service/product/update/${order.product_id}`, {
+            name: product.name,
+            price: product.price,
+            stock: updatedStock
+        });
 
         res.status(201).send({
             status: 'Order created',
             order: order,
-            // customerService: customer.data,
-            // productService: product.data
+            customerService: customer.data,
+            productService: product.data
         });
     } catch (error) {
         console.error('Error creating order:', error);

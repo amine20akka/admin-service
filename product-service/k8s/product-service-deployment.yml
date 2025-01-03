@@ -23,6 +23,7 @@ spec:
         dapr.io/app-id: "product-service"
         dapr.io/app-port: "8090"
         dapr.io/enable-mtls: "true"  # mTLS activé automatiquement par Dapr
+        dapr.io/config: "dapr-config"
     spec:
       serviceAccountName: product-service-account  # Use the service account created above
       containers:
@@ -50,9 +51,11 @@ kind: Service
 metadata:
   name: product-service
 spec:
+  type: NodePort
   selector:
     app: product-service
   ports:
     - protocol: TCP
       port: 8090
       targetPort: 8090
+      nodePort: 30003

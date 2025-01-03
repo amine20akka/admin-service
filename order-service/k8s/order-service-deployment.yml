@@ -23,11 +23,12 @@ spec:
         dapr.io/app-id: "order-service"
         dapr.io/app-port: "5002"
         dapr.io/enable-mtls: "true"  # mTLS activé automatiquement par Dapr
+        dapr.io/config: "dapr-config"
     spec:
       serviceAccountName: order-service-account  # Use the service account created above
       containers:
       - name: order-service
-        image: amine20akka/order-service:v6
+        image: amine20akka/order-service:v7
         env:
         - name: MONGO_URI
           value: "mongodb://mongodb-service:27017/order_db"
@@ -46,9 +47,11 @@ kind: Service
 metadata:
   name: order-service
 spec:
+  type: NodePort
   selector:
     app: order-service
   ports:
     - protocol: TCP
       port: 5002
       targetPort: 5002
+      nodePort: 30002
